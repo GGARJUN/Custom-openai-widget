@@ -1,0 +1,21 @@
+.container img {
+  animation-name: shutter-in-left;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-in-out;
+  animation-delay: 0s;
+  animation-iteration-count: 1;
+  animation-direction: normal;
+  animation-fill-mode: none;
+}
+@keyframes shutter-in-left {
+  0% {
+    transform: translateX(-72px);
+    transform-origin: left;
+    opacity: 0.2;
+  }
+  100% {
+    transform: unset;
+    transform-origin: left;
+    opacity: 1;
+  }
+}
