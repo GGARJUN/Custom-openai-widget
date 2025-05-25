@@ -22,6 +22,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/modules/auth/services.ts", "app/_compoents/Dialog/page.tsx", "config/aws/aws-config.ts", "app/auth/services.ts", "lib/config/amplify.js", "lib/services/auth.js", "app/layout.jsx", "app/page.jsx", "app/auth/pages/login/page.jsx", "app/api/query/route.js", "app/_compoents/Widget.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/modules/auth/services.ts", "app/_compoents/Dialog/page.tsx", "config/aws/aws-config.ts", "app/auth/services.ts", "lib/config/amplify.js", "lib/services/auth.js", "app/layout.jsx", "app/page.jsx", "app/auth/pages/login/page.jsx", "app/api/query/route.js", "app/_compoents/Widget.jsx", "components/ui/markdown-renderer.jsx", "components/ui/message-input.tsx"],
   "exclude": ["node_modules"]
 }

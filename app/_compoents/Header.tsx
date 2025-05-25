@@ -20,8 +20,8 @@ const Header = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const status = await authServices.getAuthenticatUser();
-        setIsLoggedIn(!!status.isAuthenticated);
+        const session = await authServices.getAuthenticatUser();
+        setIsLoggedIn(!!session?.tokens?.idToken); // Check for idToken to align with Login component
       } catch (err) {
         console.error("Auth Check Error:", err);
         setIsLoggedIn(false);
@@ -35,6 +35,7 @@ const Header = () => {
     setIsLoggingOut(true);
     try {
       await authServices.logout();
+      localStorage.removeItem("idToken"); // Clear idToken to align with Login component
       setIsLoggedIn(false);
       toast.success("You have been logged out successfully.");
       router.push("/");
@@ -47,27 +48,31 @@ const Header = () => {
     }
   };
 
-
   return (
     <header className="flex justify-end items-end px-10 py-2 shadow-md dark:bg-white/10 dark:border-stone-50/30 bg-black/10 border-stone-500/30 border-b">
-
       <div className="flex items-center justify-end gap-10">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Avatar className="cursor-pointer">
-              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => window.location.reload()}>
-              Refresh
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setIsDialogOpen(true)}>
-              Log out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {isLoggedIn ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Avatar className="cursor-pointer">
+                <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => window.location.reload()}>
+                Refresh
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setIsDialogOpen(true)}>
+                Log out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Link href="/auth/pages/login" className="text-blue-500 hover:underline">
+            Log In
+          </Link>
+        )}
 
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogContent>
