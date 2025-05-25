@@ -68,10 +68,12 @@
 
       if (event.data.type === "loginRequired") {
         // Redirect to login page (matches BubbleBtn and Header)
+        console.log("Iframe requested login, redirecting to /auth/pages/login");
         window.location.href = "/auth/pages/login";
       } else if (event.data.type === "requestIdToken") {
         // Send updated idToken to iframe
         const currentIdToken = localStorage.getItem("idToken") || "";
+        console.log("Sending idToken to iframe:", currentIdToken);
         iframe.contentWindow?.postMessage(
           { type: "idToken", idToken: currentIdToken },
           "https://custom-chatbot-widget.netlify.app"
@@ -79,9 +81,16 @@
       } else if (event.data.type === "toast") {
         // Trigger toast in parent page (matches RootLayout Toaster)
         if (window.sonner) {
+          console.log("Triggering toast:", event.data.severity, event.data.message);
           window.sonner[event.data.severity](event.data.message);
         } else {
           console.warn("Sonner toast library not available");
+        }
+      } else if (event.data.type === "authError") {
+        // Log authentication errors from iframe
+        console.error("Iframe authentication error:", event.data.message);
+        if (window.sonner) {
+          window.sonner.error(event.data.message || "Unable to authenticate in widget. Please try again.");
         }
       }
     });
