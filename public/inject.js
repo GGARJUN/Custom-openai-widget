@@ -1,6 +1,9 @@
 (function () {
   // Prevent multiple executions
-  if (window.__widgetIframeInjected) return;
+  if (window.__widgetIframeInjected) {
+    console.log("Widget iframe already injected, skipping.");
+    return;
+  }
   window.__widgetIframeInjected = true;
 
   try {
@@ -28,7 +31,7 @@
 
     // Create iframe
     const iframe = document.createElement("iframe");
-    iframe.src = `https://custom-chatbot-widget.netlify.app/?project_id=${encodeURIComponent(projectId)}&tags=${encodeURIComponent(tags.join(","))}&idToken=${encodeURIComponent(idToken)}`;
+    iframe.src = `https://custom-chatbot-widget.netlify.app/?project_id=${encodeURIComponent(projectId)}&tags=${encodeURIComponent(tags.join(","))}&idToken=${encodeURIComponent(idToken)}&apiBaseUrl=${encodeURIComponent("https://u9pvrypbbl.execute-api.us-east-1.amazonaws.com/prod/")}`;
     iframe.title = "Chat Widget";
     iframe.style.position = "fixed";
     iframe.style.bottom = "20px";
@@ -42,6 +45,9 @@
     iframe.allowTransparency = true;
     iframe.allow = "clipboard-write; encrypted-media";
 
+    // Log iframe URL for debugging
+    console.log("Iframe URL:", iframe.src);
+
     // Ensure document.body exists before appending
     if (document.body) {
       document.body.appendChild(iframe);
@@ -51,12 +57,17 @@
       });
     }
 
-    // Handle messages from iframe (e.g., login required)
+    // Handle messages from iframe
     window.addEventListener("message", (event) => {
-      if (event.origin !== "https://custom-chatbot-widget.netlify.app") return;
+      if (event.origin !== "https://custom-chatbot-widget.netlify.app") {
+        console.warn("Ignored message from unauthorized origin:", event.origin);
+        return;
+      }
+
+      console.log("Received message from iframe:", event.data);
 
       if (event.data.type === "loginRequired") {
-        // Redirect to login page (matches BubbleBtn and Header routing)
+        // Redirect to login page (matches BubbleBtn and Header)
         window.location.href = "/auth/pages/login";
       } else if (event.data.type === "requestIdToken") {
         // Send updated idToken to iframe
@@ -65,18 +76,27 @@
           { type: "idToken", idToken: currentIdToken },
           "https://custom-chatbot-widget.netlify.app"
         );
+      } else if (event.data.type === "toast") {
+        // Trigger toast in parent page (matches RootLayout Toaster)
+        if (window.sonner) {
+          window.sonner[event.data.severity](event.data.message);
+        } else {
+          console.warn("Sonner toast library not available");
+        }
       }
     });
 
     // Update iframe src with new idToken when it changes
     const updateIframeAuth = () => {
       const currentIdToken = localStorage.getItem("idToken") || "";
-      iframe.src = `https://custom-chatbot-widget.netlify.app/?project_id=${encodeURIComponent(projectId)}&tags=${encodeURIComponent(tags.join(","))}&idToken=${encodeURIComponent(currentIdToken)}`;
+      iframe.src = `https://custom-chatbot-widget.netlify.app/?project_id=${encodeURIComponent(projectId)}&tags=${encodeURIComponent(tags.join(","))}&idToken=${encodeURIComponent(currentIdToken)}&apiBaseUrl=${encodeURIComponent("https://u9pvrypbbl.execute-api.us-east-1.amazonaws.com/prod/")}`;
+      console.log("Updated iframe URL:", iframe.src);
     };
 
     // Watch for changes in localStorage (e.g., after login/logout)
     window.addEventListener("storage", (event) => {
       if (event.key === "idToken") {
+        console.log("idToken changed:", event.newValue);
         updateIframeAuth();
       }
     });
@@ -85,6 +105,7 @@
     window.__removeWidgetIframe = () => {
       if (iframe && iframe.parentNode) {
         iframe.parentNode.removeChild(iframe);
+        console.log("Iframe removed");
       }
       window.__widgetIframeInjected = false;
     };
