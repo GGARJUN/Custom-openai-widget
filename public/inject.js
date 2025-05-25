@@ -25,7 +25,7 @@
 
     // Create iframe
     const iframe = document.createElement("iframe");
-    iframe.src = `https://gregarious-malasada-46a300.netlify.app/?project_id=${encodeURIComponent(projectId)}&tags=${encodeURIComponent(tags.join(","))}`;
+    iframe.src = `https://custom-chatbot-widget.netlify.app/?project_id=${encodeURIComponent(projectId)}&tags=${encodeURIComponent(tags.join(","))}`;
     iframe.title = "Chat Widget";
     iframe.style.position = "fixed";
     iframe.style.bottom = "20px";
