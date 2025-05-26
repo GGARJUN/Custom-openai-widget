@@ -12,7 +12,7 @@ interface ChatContainerProps {
 }
 
 export const ChatContainer: FC<ChatContainerProps> = ({ children, className }) => (
-  <div className={cn("flex flex-col h-full w-full bg-background ", className)}>
+  <div className={cn("flex flex-col h-full w-full bg-background rounded-lg", className)}>
     {children}
   </div>
 );

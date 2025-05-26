@@ -322,7 +322,7 @@ export default function Widget({ onClose }) {
   return (
     <div
       className={cn(
-        "flex flex-col h-[450px] w-[400px] fixed bottom-5 right-5 rounded-lg bg-white border border-gray-200 shadow-lg"
+        "flex flex-col h-[450px] w-[400px] fixed bottom-5 right-5 rounded-lg border border-gray-200 shadow-lg"
       )}
     >
       {/* Header */}
