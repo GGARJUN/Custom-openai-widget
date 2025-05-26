@@ -1,15 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import Widget from "./Widget";
+import React, { useState } from 'react'
+import Widget from '../_compoents/Widget';
 
-export function BubbleBtn() {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleChat = () => {
-    setIsOpen((prev) => !prev);
-  };
-
+function Bubble() {
+      const [isOpen, setIsOpen] = useState(false);
+    
+      const toggleChat = () => {
+        setIsOpen((prev) => !prev);
+      };
   return (
     <div className="fixed bottom-4 right-4 z-50">
       {/* Chat Bubble */}
@@ -73,3 +72,5 @@ export function BubbleBtn() {
     </div>
   );
 }
+
+export default Bubble
