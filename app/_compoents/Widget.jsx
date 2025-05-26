@@ -44,7 +44,7 @@
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
 //     if (!input.trim()) return;
-  
+
 //     const newMessage = {
 //       id: Date.now().toString(),
 //       role: "user",
@@ -53,16 +53,16 @@
 //     setMessages((prev) => [...prev, newMessage]);
 //     setInput("");
 //     setIsLoading(true);
-  
+
 //     // Create a new AbortController for the request
 //     abortControllerRef.current = new AbortController();
-  
+
 //     try {
 //       const idToken = localStorage.getItem("idToken");
 //       if (!idToken) {
 //         throw new Error("No authentication token found. Please log in.");
 //       }
-  
+
 //       const response = await fetch("/api/query", {
 //         method: "POST",
 //         headers: {
@@ -77,20 +77,20 @@
 //         }),
 //         signal: abortControllerRef.current.signal,
 //       });
-  
+
 //       if (!response.ok) {
 //         const errorData = await response.json();
 //         throw new Error(errorData.error || "Failed to process query");
 //       }
-  
+
 //       const data = await response.json();
-  
+
 //       const botMessage = {
 //         id: Date.now().toString(),
 //         role: "assistant",
 //         content: data.answer || "Sorry, I couldn't process that request.",
 //       };
-  
+
 //       setMessages((prev) => [...prev, botMessage]);
 //     } catch (error) {
 //       if (error.name === "AbortError") {
@@ -210,6 +210,7 @@ import {
   MessageList,
 } from "@/components/ui/chat";
 import { cn } from "@/lib/utils";
+import { SquareX, X } from "lucide-react";
 
 const MODELS = [
   { id: "grok-3", name: "Grok 3" },
@@ -309,7 +310,7 @@ export default function Widget({ onClose }) {
       content: message.content,
     };
     setMessages((prev) => [...prev, newMessage]);
-    handleSubmit({ preventDefault: () => {} });
+    handleSubmit({ preventDefault: () => { } });
   };
 
   const stop = () => {
@@ -328,16 +329,15 @@ export default function Widget({ onClose }) {
       {/* Header */}
       <ChatContainer className="flex flex-col h-full w-full">
         <div className="flex justify-between items-center px-3 py-5 border-b border-gray-200 bg-gray-200 rounded-t-lg">
-          <h3 className="text-sm font-semibold text-gray-700">AI Assistant</h3>
+          <h3 className="text-md font-semibold text-blue-700">AI Assistant</h3>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 text-sm"
+            className="text-gray-900 text-sm"
             aria-label="Close chat"
           >
-            ✕
+            <SquareX />
           </button>
         </div>
-
         <ChatMessages className="grow overflow-y-auto p-3">
           <MessageList messages={messages} isTyping={isLoading} />
         </ChatMessages>
